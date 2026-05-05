@@ -1,0 +1,17 @@
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/bin/Debug/net9.0/Infrastructure.deps.json
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/bin/Debug/net9.0/Infrastructure.dll
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/bin/Debug/net9.0/Infrastructure.pdb
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/bin/Debug/net9.0/Application.dll
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/bin/Debug/net9.0/Domain.dll
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/bin/Debug/net9.0/Application.pdb
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/bin/Debug/net9.0/Domain.pdb
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastructure.csproj.AssemblyReference.cache
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastructure.AssemblyInfoInputs.cache
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastructure.AssemblyInfo.cs
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastructure.csproj.CoreCompileInputs.cache
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastr.15EFFBFE.Up2Date
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastructure.dll
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/refint/Infrastructure.dll
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/Infrastructure.pdb
+/Users/htc3p/Projects/micro-wallet/backend/src/Infrastructure/obj/Debug/net9.0/ref/Infrastructure.dll

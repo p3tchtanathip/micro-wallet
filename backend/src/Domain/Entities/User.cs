@@ -1,3 +1,5 @@
+using Domain.Enums;
+
 namespace Domain.Entities;
 
 public class User
@@ -6,7 +8,7 @@ public class User
 	public required string Email { get; set; }
 	public required string Password { get; set; }
 	public string? FullName { get; set; }
-	public string? Provider { get; set; }
+	public AuthProvider Provider { get; set; } = AuthProvider.Local;
 	public bool IsActive { get; set; } = true;
 	public DateTime CreatedAt { get; set; }
 	public string? RefreshToken { get; set; }

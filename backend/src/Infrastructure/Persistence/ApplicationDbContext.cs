@@ -31,6 +31,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             entity.Property(e => e.Password)
                 .IsRequired();
 
+            entity.Property(e => e.Provider)
+                .HasConversion<string>();
+
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true);
 

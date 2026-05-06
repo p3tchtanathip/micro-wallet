@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: microwallet_db
+    ports:
+      - "5432:5432"

@@ -15,7 +15,30 @@ builder.Services.AddControllers();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Configure Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MicroWalletPolicy", policy =>
+    {
+        policy.WithOrigins(builder.Configuration["FrontendUrl"] ?? "http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
+
+app.Use((context, next) =>
+{
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self';"); 
+
+    return next();
+});
 
 if (app.Environment.IsDevelopment())
 {
@@ -28,8 +51,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+}
 app.UseHttpsRedirection();
 
-app.MapControllers(); 
+app.UseRouting();
+app.UseCors("MicroWalletPolicy");
 
+app.MapControllers(); 
 app.Run();

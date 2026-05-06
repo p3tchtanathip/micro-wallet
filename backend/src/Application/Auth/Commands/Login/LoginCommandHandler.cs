@@ -29,8 +29,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
         await _context.SaveChangesAsync(ct);
 
-        return new LoginResponse(accessToken, refreshToken, user.Email);
+        return new LoginResponse(accessToken, refreshToken);
     }
 }

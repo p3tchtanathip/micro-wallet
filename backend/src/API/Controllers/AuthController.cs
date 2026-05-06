@@ -1,3 +1,6 @@
+using Application.Auth.Commands.GoogleLogin;
+using Application.Auth.Commands.Login;
+using Application.Auth.Commands.RefreshToken;
 using Application.Auth.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +19,27 @@ namespace API.Controllers
         {
             var userId = await _mediator.Send(command);
             return Ok(userId);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginResponse>> Login(LoginCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("google-login")]
+        public async Task<ActionResult<LoginResponse>> GoogleLogin([FromBody] string idToken)
+        {
+            var result = await _mediator.Send(new GoogleLoginCommand(idToken));
+            return Ok(result);
+        }
+
+        [HttpPost("refresh")]
+        public async Task<ActionResult<RefreshTokenResponse>> Refresh(RefreshTokenCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

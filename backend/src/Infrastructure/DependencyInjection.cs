@@ -13,6 +13,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(

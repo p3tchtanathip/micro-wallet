@@ -5,7 +5,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Auth/Commands/GoogleLogin/" />
     <Folder Include="Auth/Commands/Login/" />
+    <Folder Include="Auth/Commands/RefreshToken/" />
     <Folder Include="Common/" />
     <Folder Include="Common/Behaviors/" />
     <Folder Include="Common/Interfaces/" />

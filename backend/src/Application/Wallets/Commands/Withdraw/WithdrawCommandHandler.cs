@@ -72,7 +72,7 @@ public class WithdrawCommandHandler : IRequestHandler<WithdrawCommand, Transacti
         var transaction = new Transaction
         {
             ReferenceNo = Guid.NewGuid().ToString(),
-            Type = TransactionType.Deposit,
+            Type = TransactionType.Withdraw,
             Status = TransactionStatus.Pending,
             IdempotencyKey = idempotency,
             CreatedAt = DateTime.UtcNow,

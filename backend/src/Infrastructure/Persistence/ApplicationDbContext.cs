@@ -2,6 +2,7 @@ using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Constants;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
@@ -13,6 +14,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Wallet> Wallets => Set<Wallet>();
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<TransactionEntry> TransactionEntries => Set<TransactionEntry>();
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct) 
+    => await Database.BeginTransactionAsync(ct);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

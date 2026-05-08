@@ -1,5 +1,6 @@
 using API.Attributes;
 using Application.Wallets.Commands.Deposit;
+using Application.Wallets.Commands.Transfer;
 using Application.Wallets.Commands.Withdraw;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +28,15 @@ namespace API.Controllers
         [Idempotent]
         [HttpPost("withdraw")]
         public async Task<ActionResult> Withdraw(WithdrawCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [Idempotent]
+        [HttpPost("transfer")]
+        public async Task<ActionResult> Transfer(TransferCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);

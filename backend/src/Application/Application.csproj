@@ -12,6 +12,7 @@
     <Folder Include="Common/Exceptions/" />
     <Folder Include="Common/Responses/" />
     <Folder Include="Wallets/" />
+    <Folder Include="Wallets/Commands/Transfer/" />
     <Folder Include="Wallets/Commands/Withdraw/" />
   </ItemGroup>
 

@@ -1,5 +1,6 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
@@ -53,6 +54,11 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             
             entity.HasIndex(e => e.Name)
                 .IsUnique();
+
+            entity.HasData(
+                new Role { Id = 1, Name = RoleNames.Admin },
+                new Role { Id = 2, Name = RoleNames.User }
+            );
         });
 
         // UserRole
@@ -92,7 +98,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 .HasPrecision(18, 2)
                 .HasDefaultValue(0);
 
-            entity.Property(e => e.RowVersion)
+            entity.Property<uint>("xmin")
                 .IsRowVersion();
 
             entity.HasOne(e => e.User)

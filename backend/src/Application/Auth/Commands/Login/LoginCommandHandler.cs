@@ -19,7 +19,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
 
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken ct)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email, ct);
+        var user = await _context.Users.Include(u => u.UserRoles).ThenInclude(ur => ur.Role).FirstOrDefaultAsync(u => u.Email == request.Email, ct);
         
         if (user == null || !_passwordHasher.Verify(request.Password, user.Password))
             throw new Exception("Invalid email or password");

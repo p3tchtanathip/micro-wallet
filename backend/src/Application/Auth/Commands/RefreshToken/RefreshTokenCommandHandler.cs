@@ -18,6 +18,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
     public async Task<RefreshTokenResponse> Handle(RefreshTokenCommand request, CancellationToken ct)
     {
         var user = await _context.Users
+            .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.RefreshToken == request.RefreshToken, ct);
 
         if (user == null || 

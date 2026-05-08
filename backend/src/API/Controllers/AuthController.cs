@@ -3,6 +3,7 @@ using Application.Auth.Commands.Login;
 using Application.Auth.Commands.RefreshToken;
 using Application.Auth.Commands.Register;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -40,6 +41,14 @@ namespace API.Controllers
         {
             var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("debug")]
+        public ActionResult Debug()
+        {
+            var claims = User.Claims.Select(c => new { c.Type, c.Value });
+            return Ok(claims);
         }
     }
 }

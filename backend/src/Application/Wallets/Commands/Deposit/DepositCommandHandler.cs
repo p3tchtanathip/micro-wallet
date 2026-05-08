@@ -117,6 +117,7 @@ public class DepositCommandHandler : IRequestHandler<DepositCommand, Transaction
         }
 
         wallet.Balance += request.Amount;
+        wallet.UpdatedAt = DateTime.UtcNow;
 
         transaction.Status = TransactionStatus.Success;
 

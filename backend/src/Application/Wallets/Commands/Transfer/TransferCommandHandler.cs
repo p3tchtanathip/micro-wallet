@@ -87,6 +87,8 @@ public class TransferCommandHandler : IRequestHandler<TransferCommand, Transacti
 
             // Source
             senderWallet.Balance -= request.Amount;
+            senderWallet.UpdatedAt = DateTime.UtcNow;
+
             _context.TransactionEntries.Add(new TransactionEntry
             {
                 Transaction = transaction,
@@ -96,6 +98,8 @@ public class TransferCommandHandler : IRequestHandler<TransferCommand, Transacti
 
             // Destination
             receiverWallet.Balance += request.Amount;
+            receiverWallet.UpdatedAt = DateTime.UtcNow;
+
             _context.TransactionEntries.Add(new TransactionEntry
             {
                 Transaction = transaction,

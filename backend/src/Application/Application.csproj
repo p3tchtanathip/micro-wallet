@@ -10,10 +10,14 @@
     <Folder Include="Auth/Commands/RefreshToken/" />
     <Folder Include="Common/Behaviors/" />
     <Folder Include="Common/Exceptions/" />
+    <Folder Include="Common/Models/" />
     <Folder Include="Common/Responses/" />
     <Folder Include="Wallets/" />
     <Folder Include="Wallets/Commands/Transfer/" />
     <Folder Include="Wallets/Commands/Withdraw/" />
+    <Folder Include="Wallets/Queries/" />
+    <Folder Include="Wallets/Queries/GetBalanceSummary/" />
+    <Folder Include="Wallets/Queries/GetTransactionHistory/" />
   </ItemGroup>
 
   <ItemGroup>

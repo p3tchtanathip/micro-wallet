@@ -123,6 +123,7 @@ public class WithdrawCommandHandler : IRequestHandler<WithdrawCommand, Transacti
         }
 
         wallet.Balance -= request.Amount;
+        wallet.UpdatedAt = DateTime.UtcNow;
 
         transaction.Status = TransactionStatus.Success;
 

@@ -1,6 +1,6 @@
 # MicroWallet
 
-A production-grade digital wallet API built with .NET 9 following Clean Architecture principles.
+A digital wallet API built with .NET 9 following Clean Architecture principles.
 
 ## Architecture
 

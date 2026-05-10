@@ -5,5 +5,6 @@ namespace Application.Wallets.Commands.Withdraw;
 
 public record class WithdrawCommand(
     long WalletId,
-    decimal Amount
+    decimal Amount,
+    string? Description = null
 ) : IRequest<TransactionResponse>;

@@ -24,7 +24,7 @@ public class WithdrawCommandHandler : IRequestHandler<WithdrawCommand, Transacti
     public async Task<TransactionResponse> Handle(WithdrawCommand request, CancellationToken ct)
     {
         if (_requestContext.UserId == null) throw new UnauthorizedAccessException();
-        
+
         var currentUserId = long.Parse(_requestContext.UserId);
 
         var wallet = await _context.Wallets
@@ -75,6 +75,7 @@ public class WithdrawCommandHandler : IRequestHandler<WithdrawCommand, Transacti
             Type = TransactionType.Withdraw,
             Status = TransactionStatus.Pending,
             IdempotencyKey = idempotency,
+            Description = request.Description,
             CreatedAt = DateTime.UtcNow,
         };
 

@@ -24,7 +24,7 @@ public class DepositCommandHandler : IRequestHandler<DepositCommand, Transaction
     public async Task<TransactionResponse> Handle(DepositCommand request, CancellationToken ct)
     {
         if (_requestContext.UserId == null) throw new UnauthorizedAccessException();
-        
+
         var currentUserId = long.Parse(_requestContext.UserId);
 
         var wallet = await _context.Wallets
@@ -69,6 +69,7 @@ public class DepositCommandHandler : IRequestHandler<DepositCommand, Transaction
             Type = TransactionType.Deposit,
             Status = TransactionStatus.Pending,
             IdempotencyKey = idempotencyKey,
+            Description = request.Description,
             CreatedAt = DateTime.UtcNow,
         };
 

@@ -40,13 +40,18 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                 message = ex.Message;
                 break;
 
-            case NotFoundException ex: 
+            case NotFoundException ex:
                 code = HttpStatusCode.NotFound;     // 404
                 message = ex.Message;
                 break;
 
-            case ConflictException ex: 
+            case ConflictException ex:
                 code = HttpStatusCode.Conflict;     // 409
+                message = ex.Message;
+                break;
+
+            case BadGatewayException ex:
+                code = HttpStatusCode.BadGateway;   // 502
                 message = ex.Message;
                 break;
 

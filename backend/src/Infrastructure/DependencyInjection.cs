@@ -20,8 +20,21 @@ public static class DependencyInjection
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IGoogleAuthService, GoogleAuthService>();
         services.AddScoped<IWalletService, WalletService>();
-        services.AddScoped<IPaymentGatewayService, PaymentGatewayService>(); 
+        services.AddScoped<IPaymentGatewayService, PaymentGatewayService>();
         services.AddScoped<IRequestContext, RequestContext>();
+
+        services.AddHttpClient<IExchangeRateService, ExchangeRateService>(
+            client =>
+            {
+                client.BaseAddress = new Uri("https://api.frankfurter.app/");
+                client.Timeout = TimeSpan.FromSeconds(5);
+            });
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration =
+                configuration.GetConnectionString("Redis");
+        });
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
@@ -51,9 +64,9 @@ public static class DependencyInjection
                 configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-        services.AddScoped<IApplicationDbContext>(provider => 
+        services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
-        
+
         return services;
     }
 }

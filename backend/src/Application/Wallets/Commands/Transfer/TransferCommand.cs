@@ -4,8 +4,8 @@ using MediatR;
 namespace Application.Wallets.Commands.Transfer;
 
 public record class TransferCommand(
-    long FromWalletId,
-    long ToWalletId,
+    string FromWalletNumber,
+    string ToWalletNumber,
     decimal Amount,
     string? Description = null
 ) : IRequest<TransactionResponse>;

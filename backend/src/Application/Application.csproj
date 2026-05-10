@@ -12,6 +12,7 @@
     <Folder Include="Common/Exceptions/" />
     <Folder Include="Common/Models/" />
     <Folder Include="Wallets/" />
+    <Folder Include="Wallets/Commands/Create/" />
     <Folder Include="Wallets/Commands/Transfer/" />
     <Folder Include="Wallets/Commands/Withdraw/" />
     <Folder Include="Wallets/Queries/" />

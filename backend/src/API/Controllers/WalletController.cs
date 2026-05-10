@@ -1,5 +1,6 @@
 using API.Attributes;
 using Application.Common.Responses;
+using Application.Wallets.Commands.Create;
 using Application.Wallets.Commands.Deposit;
 using Application.Wallets.Commands.Transfer;
 using Application.Wallets.Commands.Withdraw;
@@ -81,6 +82,14 @@ namespace API.Controllers
         public async Task<ActionResult<WalletResponse[]>> GetUserWallets()
         {
             var result = await _mediator.Send(new GetUserWalletQuery());
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task<ActionResult<WalletResponse>> CreateWallet(CreateCommand command)
+        {
+            var result = await _mediator.Send(command);
             return Ok(result);
         }
     }

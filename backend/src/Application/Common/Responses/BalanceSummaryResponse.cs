@@ -1,8 +1,7 @@
 namespace Application.Common.Responses;
 
 public record BalanceSummaryResponse(
-    string WalletNumber,
-    decimal CurrentBalance,
-    string Currency,
+    decimal TotalBalanceTHB,
+    decimal ExchangeRate,
     DateTime? LastUpdated
 );

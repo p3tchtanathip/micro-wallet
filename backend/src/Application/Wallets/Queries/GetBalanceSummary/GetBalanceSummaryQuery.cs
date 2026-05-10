@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.Wallets.Queries.GetBalanceSummary;
 
-public record GetBalanceSummaryQuery(long WalletId) : IRequest<BalanceSummaryResponse>;
+public record GetBalanceSummaryQuery : IRequest<BalanceSummaryResponse>;

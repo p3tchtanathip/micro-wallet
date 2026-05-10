@@ -5,6 +5,7 @@ using Application.Wallets.Commands.Transfer;
 using Application.Wallets.Commands.Withdraw;
 using Application.Wallets.Queries.GetBalanceSummary;
 using Application.Wallets.Queries.GetTransactionHistory;
+using Application.Wallets.Queries.GetUserWallet;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -68,11 +69,18 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet("{walletId}/balance")]
-        public async Task<ActionResult<BalanceSummaryResponse>> GetBalanceSummary([FromRoute] long walletId)
+        [HttpGet("balances")]
+        public async Task<ActionResult<BalanceSummaryResponse>> GetBalanceSummary()
         {
-            var result = await _mediator.Send(new GetBalanceSummaryQuery(walletId));
+            var result = await _mediator.Send(new GetBalanceSummaryQuery());
+            return Ok(result);
+        }
 
+        [Authorize(Roles = "User")]
+        [HttpGet]
+        public async Task<ActionResult<WalletResponse[]>> GetUserWallets()
+        {
+            var result = await _mediator.Send(new GetUserWalletQuery());
             return Ok(result);
         }
     }

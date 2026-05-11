@@ -465,3 +465,6 @@ dist
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/node,nextjs,visualstudiocode,dotnetcore,aspnetcore
+
+# Project specific
+backend/src/API/appsettings.Development.json

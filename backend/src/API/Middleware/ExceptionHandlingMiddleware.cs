@@ -1,4 +1,5 @@
 using Application.Common.Exceptions;
+using FluentValidation;
 using System.Net;
 using System.Text.Json;
 
@@ -25,6 +26,11 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
 
         switch (exception)
         {
+            case ValidationException ex:
+                code = HttpStatusCode.BadRequest;   // 400
+                message = string.Join(", ", ex.Errors.Select(e => e.ErrorMessage));
+                break;
+
             case BadRequestException ex:
                 code = HttpStatusCode.BadRequest;   // 400
                 message = ex.Message;
@@ -56,7 +62,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                 break;
 
             default:
-                code = HttpStatusCode.InternalServerError;
+                code = HttpStatusCode.InternalServerError;  // 500
                 message = "Internal Server Error";
                 break;
         }

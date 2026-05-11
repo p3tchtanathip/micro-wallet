@@ -59,7 +59,7 @@ app.Use((context, next) =>
     context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
     context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
-    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self';"); 
+    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self';");
 
     return next();
 });
@@ -67,7 +67,7 @@ app.Use((context, next) =>
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    
+
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -86,8 +86,10 @@ app.UseRouting();
 
 app.UseCors("MicroWalletPolicy");
 
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers(); 
+app.MapControllers();
 app.Run();
+
+public partial class Program { }

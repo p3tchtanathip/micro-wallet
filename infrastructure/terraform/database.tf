@@ -31,5 +31,5 @@ resource "google_sql_database_instance" "postgres" {
 resource "google_sql_user" "db_user" {
   name     = "postgres"
   instance = google_sql_database_instance.postgres.name
-  password = "YourSecurePasswordHere" # You should change this or use a variable
+  password = var.db_password
 }

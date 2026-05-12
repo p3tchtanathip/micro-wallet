@@ -478,3 +478,4 @@ id_rsa_gcp.pub
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
+terraform.tfvars

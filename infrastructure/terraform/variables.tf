@@ -17,3 +17,9 @@ variable "ssh_public_key_path" {
   type    = string
   default = "../../id_rsa_gcp.pub"
 }
+
+variable "db_password" {
+  description = "The password for the database user"
+  type        = string
+  sensitive   = true
+}

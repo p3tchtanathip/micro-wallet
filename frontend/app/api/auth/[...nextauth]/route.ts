@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5168";
+const API_BASE_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL;
 
 function parseJwt(token: string) {
   try {
@@ -15,7 +15,7 @@ function parseJwt(token: string) {
 
 async function refreshAccessToken(token: JWT) {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/Auth/refresh`, {
+    const res = await fetch(`${API_BASE_URL}/Auth/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +68,10 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const res = await fetch(`${API_BASE_URL}/api/Auth/login`, {
+          const loginUrl = `${API_BASE_URL}/Auth/login`;
+          console.log(`Attempting login at: ${loginUrl}`);
+          
+          const res = await fetch(loginUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -80,11 +83,13 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!res.ok) {
+            console.error(`Login failed with status: ${res.status}`);
             throw new Error("Invalid credentials");
           }
 
           const data = await res.json();
-          
+          console.log("Login successful, token received");
+
           if (data && data.accessToken) {
             // We return an object that will be passed to the jwt callback as `user`
             return {
@@ -94,7 +99,7 @@ export const authOptions: NextAuthOptions = {
               refreshToken: data.refreshToken,
             };
           }
-          
+
           return null;
         } catch (error) {
           console.error("Auth error:", error);
@@ -110,7 +115,7 @@ export const authOptions: NextAuthOptions = {
         if (account.provider === "google") {
           // Send id_token to backend
           try {
-            const res = await fetch(`${API_BASE_URL}/api/Auth/google-login`, {
+            const res = await fetch(`${API_BASE_URL}/Auth/google-login`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

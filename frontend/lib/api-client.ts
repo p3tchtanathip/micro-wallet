@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getSession, signIn } from 'next-auth/react'
 
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5168',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -30,11 +30,11 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-    
+
     // Handle 401 Unauthorized globally
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
-      
+
       if (typeof window !== 'undefined') {
         // Since we removed manual refresh token logic in favor of NextAuth,
         // if we get a 401, we should probably force the user to sign in again.
@@ -42,7 +42,7 @@ apiClient.interceptors.response.use(
         signIn();
       }
     }
-    
+
     return Promise.reject(error)
   }
 )

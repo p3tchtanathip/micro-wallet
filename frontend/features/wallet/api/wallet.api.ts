@@ -11,12 +11,12 @@ import {
 } from '../types'
 
 export const getWallets = async (): Promise<WalletResponse[]> => {
-  const response = await apiClient.get<WalletResponse[]>('/api/Wallet')
+  const response = await apiClient.get<WalletResponse[]>('/Wallet')
   return response.data
 }
 
 export const getTotalBalance = async (): Promise<TotalBalanceResponse> => {
-  const response = await apiClient.get<TotalBalanceResponse>('/api/Wallet/balances')
+  const response = await apiClient.get<TotalBalanceResponse>('/Wallet/balances')
   return response.data
 }
 
@@ -28,29 +28,29 @@ export const getTransactions = async (walletId: number, pageNumber = 1, pageSize
     params.append('transactionType', transactionType.toString())
   }
 
-  const response = await apiClient.get(`/api/Wallet/${walletId}/transactions?${params.toString()}`)
+  const response = await apiClient.get(`/Wallet/${walletId}/transactions?${params.toString()}`)
   return response.data
 }
 
 export const deposit = async (data: DepositCommand): Promise<void> => {
-  await apiClient.post('/api/Wallet/deposit', data, {
+  await apiClient.post('/Wallet/deposit', data, {
     headers: { 'Idempotency-Key': uuidv4() }
   })
 }
 
 export const withdraw = async (data: WithdrawCommand): Promise<void> => {
-  await apiClient.post('/api/Wallet/withdraw', data, {
+  await apiClient.post('/Wallet/withdraw', data, {
     headers: { 'Idempotency-Key': uuidv4() }
   })
 }
 
 export const transfer = async (data: TransferCommand): Promise<void> => {
-  await apiClient.post('/api/Wallet/transfer', data, {
+  await apiClient.post('/Wallet/transfer', data, {
     headers: { 'Idempotency-Key': uuidv4() }
   })
 }
 
 export const createWallet = async (currency: 'THB' | 'USD'): Promise<WalletResponse> => {
-  const response = await apiClient.post<WalletResponse>('/api/Wallet', { currency })
+  const response = await apiClient.post<WalletResponse>('/Wallet', { currency })
   return response.data
 }

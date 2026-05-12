@@ -13,6 +13,8 @@ spec:
       labels:
         app: backend
     spec:
+      imagePullSecrets:
+      - name: google-registry-key
       containers:
       - name: backend
         image: asia-southeast1-docker.pkg.dev/microwallet-495518/microwallet-repo/backend:latest

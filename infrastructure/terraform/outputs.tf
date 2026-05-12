@@ -16,3 +16,8 @@ output "db_private_ip" {
   value       = google_sql_database_instance.postgres.private_ip_address
   description = "IP address of the database (Use this in your Connection String)"
 }
+
+output "redis_host" {
+  value       = google_redis_instance.cache.host
+  description = "IP address of the Redis instance"
+}

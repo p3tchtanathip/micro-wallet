@@ -29,7 +29,10 @@ spec:
               name: microwallet-secrets
               key: DB_CONNECTION_STRING
         - name: ConnectionStrings__Redis
-          value: "microwallet-redis:6379"
+          valueFrom:
+            secretKeyRef:
+              name: microwallet-secrets
+              key: REDIS_CONNECTION
 ---
 apiVersion: v1
 kind: Service

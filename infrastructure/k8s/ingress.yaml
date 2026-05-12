@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microwallet-ingress
+  namespace: microwallet
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # Optional: Enable SSL redirect if using cert-manager
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - host: microwallet.p3tchtanathip.work
+    http:
+      paths:
+      - path: /api/auth/
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 3000
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 8080
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 3000

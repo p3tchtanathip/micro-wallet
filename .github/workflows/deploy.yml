@@ -1,0 +1,96 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  PROJECT_ID: microwallet-495518
+  REGION: asia-southeast1
+  REPOSITORY: microwallet-repo
+
+jobs:
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore dependencies
+        run: dotnet restore backend/MicroWallet.sln
+      - name: Run Backend Tests
+        run: dotnet test backend/tests/UnitTests
+
+  build-and-push:
+    name: Build & Push Images
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Configure Docker'
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
+
+      - name: Build and Push Backend
+        run: |
+          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }} ./backend
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/backend:${{ github.sha }}
+
+      - name: Build and Push Frontend
+        run: |
+          docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:${{ github.sha }} ./frontend
+          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/frontend:${{ github.sha }}
+
+  deploy:
+    name: Deploy to k3s
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare Manifests
+        run: |
+          # Replace the image tag in the manifests with the current SHA
+          sed -i "s|backend:latest|backend:${{ github.sha }}|g" infrastructure/k8s/backend.yaml
+          sed -i "s|frontend:latest|frontend:${{ github.sha }}|g" infrastructure/k8s/frontend.yaml
+
+      - name: Copy Manifests to VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.GCE_VM_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "infrastructure/k8s/*.yaml"
+          target: "~/microwallet-deploy"
+          strip_components: 2
+
+      - name: Execute Remote Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.GCE_VM_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/microwallet-deploy
+            # Ensure namespace exists
+            sudo kubectl apply -f namespace.yaml
+            # Apply secrets if they exist on VM (or handle them separately)
+            # For this exercise, we assume secrets.yaml is handled manually once
+            # or you can apply it here if you've updated it on VM.
+            sudo kubectl apply -f .

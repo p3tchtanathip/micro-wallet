@@ -1,27 +1,38 @@
-# Build Stage
-FROM node:24-alpine AS builder
-
+# Stage 1: Base
+FROM node:24-alpine AS base
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+# Stage 2: Development
+FROM base AS development
+ENV NODE_ENV=development
+# The source will be mounted via volumes in docker-compose
+CMD ["npm", "run", "dev"]
+
+# Stage 3: Build
+FROM base AS builder
 COPY package*.json ./
-
 RUN npm ci
-
 COPY . .
-
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-# Runtime Stage
-FROM node:24-alpine
-
+# Stage 4: Production
+FROM base AS production
 WORKDIR /app
-
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
 
+USER nextjs
 EXPOSE 3000
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]

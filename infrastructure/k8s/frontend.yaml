@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: microwallet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: asia-southeast1-docker.pkg.dev/microwallet-495518/microwallet-repo/frontend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NEXTAUTH_URL
+          value: "http://microwallet.p3tchtanathip.work"
+        - name: NEXTAUTH_URL_INTERNAL
+          value: "http://frontend:3000"
+        - name: NEXT_PUBLIC_API_URL
+          value: "/api"
+        - name: BACKEND_API_URL
+          value: "http://backend:8080/api"
+        - name: NEXTAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: microwallet-secrets
+              key: NEXTAUTH_SECRET
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: microwallet-secrets
+              key: GOOGLE_CLIENT_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: microwallet
+spec:
+  selector:
+    app: frontend
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000

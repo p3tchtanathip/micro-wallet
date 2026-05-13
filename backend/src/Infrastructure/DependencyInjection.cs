@@ -1,14 +1,14 @@
+using System.Security.Claims;
+using System.Text;
 using Application.Common.Interfaces;
+using Infrastructure.Context;
 using Infrastructure.Security;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using Infrastructure.Context;
 
 namespace Infrastructure;
 
@@ -26,7 +26,7 @@ public static class DependencyInjection
         services.AddHttpClient<IExchangeRateService, ExchangeRateService>(
             client =>
             {
-                client.BaseAddress = new Uri("https://api.frankfurter.app/");
+                client.BaseAddress = new Uri("https://api.frankfurter.dev/v1/");
                 client.Timeout = TimeSpan.FromSeconds(5);
             });
 

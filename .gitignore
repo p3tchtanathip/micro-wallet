@@ -479,3 +479,4 @@ id_rsa_gcp.pub
 *.tfstate.backup
 .terraform.lock.hcl
 terraform.tfvars
+*.tfstate.lock.info

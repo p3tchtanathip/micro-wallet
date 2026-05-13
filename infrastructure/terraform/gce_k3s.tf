@@ -37,6 +37,23 @@ resource "google_compute_instance" "k3s_node" {
 
   metadata_startup_script = <<-EOF
     #!/bin/bash
+    # 1. Install k3s
     curl -sfL https://get.k3s.io | sh -s - --disable traefik
+
+    # 2. Set KUBECONFIG for root (k3s default)
+    export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+    
+    # Wait for k3s to be ready
+    until kubectl get nodes; do sleep 5; done
+
+    # 3. Install Helm
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+    # 4. Install NGINX Ingress Controller
+    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    helm repo update
+    helm upgrade --install ingress-nginx ingress-nginx \
+      --repo https://kubernetes.github.io/ingress-nginx \
+      --namespace ingress-nginx --create-namespace
   EOF
 }

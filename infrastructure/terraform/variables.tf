@@ -10,7 +10,7 @@ variable "region" {
 
 variable "zone" {
   type    = string
-  default = "asia-southeast1-a"
+  default = "asia-southeast1-b"
 }
 
 variable "ssh_public_key_path" {

@@ -33,6 +33,11 @@ spec:
             secretKeyRef:
               name: microwallet-secrets
               key: REDIS_CONNECTION
+        - name: Jwt__Key
+          valueFrom:
+            secretKeyRef:
+              name: microwallet-secrets
+              key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service

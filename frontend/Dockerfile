@@ -15,6 +15,11 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# NEXT_PUBLIC_ vars must be available at build time (they get inlined into JS)
+ARG NEXT_PUBLIC_API_URL=/api/
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
 RUN npm run build
 
 # Stage 4: Production

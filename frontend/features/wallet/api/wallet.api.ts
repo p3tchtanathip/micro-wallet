@@ -11,12 +11,12 @@ import {
 } from '../types'
 
 export const getWallets = async (): Promise<WalletResponse[]> => {
-  const response = await apiClient.get<WalletResponse[]>('/Wallet')
+  const response = await apiClient.get<WalletResponse[]>('Wallet')
   return response.data
 }
 
 export const getTotalBalance = async (): Promise<TotalBalanceResponse> => {
-  const response = await apiClient.get<TotalBalanceResponse>('/Wallet/balances')
+  const response = await apiClient.get<TotalBalanceResponse>('Wallet/balances')
   return response.data
 }
 
@@ -28,12 +28,12 @@ export const getTransactions = async (walletId: number, pageNumber = 1, pageSize
     params.append('transactionType', transactionType.toString())
   }
 
-  const response = await apiClient.get(`/Wallet/${walletId}/transactions?${params.toString()}`)
+  const response = await apiClient.get(`Wallet/${walletId}/transactions?${params.toString()}`)
   return response.data
 }
 
 export const deposit = async (data: DepositCommand): Promise<void> => {
-  await apiClient.post('/Wallet/deposit', data, {
+  await apiClient.post('Wallet/deposit', data, {
     headers: { 'Idempotency-Key': uuidv4() }
   })
 }

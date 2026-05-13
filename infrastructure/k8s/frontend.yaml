@@ -22,11 +22,11 @@ spec:
         - containerPort: 3000
         env:
         - name: NEXTAUTH_URL
-          value: "http://microwallet.p3tchtanathip.work"
+          value: "https://microwallet.p3tchtanathip.work"
         - name: NEXTAUTH_URL_INTERNAL
           value: "http://frontend:3000"
         - name: NEXT_PUBLIC_API_URL
-          value: "/api"
+          value: "/api/"
         - name: BACKEND_API_URL
           value: "http://backend:8080/api"
         - name: NEXTAUTH_SECRET

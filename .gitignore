@@ -469,6 +469,9 @@ dist
 
 # Project specific
 backend/src/API/appsettings.Development.json
+backend/**/*.csproj.Iscache
+backend/**/*.cache
+
 # GCP SSH Keys
 id_rsa_gcp
 id_rsa_gcp.pub
@@ -482,3 +485,4 @@ terraform.tfvars
 *.tfstate.lock.info
 
 AGENTS.md
+*.csproj.Iscache

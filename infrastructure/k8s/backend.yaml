@@ -38,12 +38,12 @@ spec:
                 secretKeyRef:
                   name: microwallet-secrets
                   key: JWT_KEY
-            - name: GROQ_API_KEY
+            - name: Groq__ApiKey
               valueFrom:
                 secretKeyRef:
                   name: microwallet-secrets
                   key: GROQ_API_KEY
-            - name: GROQ_MODEL
+            - name: Groq__Model
               value: "llama-3.1-70b-versatile"
 ---
 apiVersion: v1

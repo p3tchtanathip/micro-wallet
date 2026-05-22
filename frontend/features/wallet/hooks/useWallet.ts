@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getWallets, getTotalBalance, getTransactions, deposit, withdraw, transfer, createWallet } from '../api/wallet.api'
-import { TransferCommand, TransactionType, WalletResponse } from '../types'
+import { getWallets, getTotalBalance, getTransactions, deposit, withdraw, transfer, createWallet, aiQuery } from '../api/wallet.api'
+import { TransferCommand, TransactionType, WalletResponse, AiQueryCommand } from '../types'
 
 export const useWallets = () => {
   return useQuery({
@@ -59,6 +59,12 @@ export const useTransfer = (walletId: number, fromWalletNumber: string) => {
       queryClient.invalidateQueries({ queryKey: ['wallets'] })
       queryClient.invalidateQueries({ queryKey: ['walletTransactions', walletId] })
     },
+  })
+}
+
+export const useAiQuery = () => {
+  return useMutation({
+    mutationFn: (data: AiQueryCommand) => aiQuery(data),
   })
 }
 

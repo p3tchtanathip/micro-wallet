@@ -49,6 +49,22 @@ export interface Transaction {
   direction: string;
 }
 
+export interface AiQueryCommand {
+  walletId: number;
+  query: string;
+}
+
+export interface AiQueryResponse {
+  answer: string;
+}
+
+export interface AiChatMessage {
+  id: string;
+  query: string;
+  answer: string;
+  timestamp: Date;
+}
+
 export interface PaginatedTransactionsResponse {
   items: Transaction[];
   pageNumber: number;

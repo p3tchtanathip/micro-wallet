@@ -7,7 +7,9 @@ import {
   TransactionType,
   PaginatedTransactionsResponse,
   WalletResponse,
-  TotalBalanceResponse
+  TotalBalanceResponse,
+  AiQueryCommand,
+  AiQueryResponse
 } from '../types'
 
 export const getWallets = async (): Promise<WalletResponse[]> => {
@@ -52,5 +54,10 @@ export const transfer = async (data: TransferCommand): Promise<void> => {
 
 export const createWallet = async (currency: 'THB' | 'USD'): Promise<WalletResponse> => {
   const response = await apiClient.post<WalletResponse>('/Wallet', { currency })
+  return response.data
+}
+
+export const aiQuery = async (data: AiQueryCommand): Promise<AiQueryResponse> => {
+  const response = await apiClient.post<AiQueryResponse>('/Wallet/ai-query', data)
   return response.data
 }

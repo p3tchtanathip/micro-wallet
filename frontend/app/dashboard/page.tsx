@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useTotalBalance, useWalletTransactions, useWallets, useCreateWallet } from "@/features/wallet/hooks/useWallet";
 import { ActionButtons } from "@/features/wallet/components/ActionButtons";
+import { AIAssistantPanel } from "@/features/wallet/components/AIAssistantPanel";
 import { formatCurrency } from "@/lib/utils";
 import {
   Wallet,
@@ -332,6 +333,8 @@ export default function DashboardPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <AIAssistantPanel key={selectedWalletId} walletId={selectedWalletId} />
     </div>
   );
 }

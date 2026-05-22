@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`} style={{ colorScheme: "dark" }}>
+    <html lang="en" className={`${inter.variable} h-full dark`}>
       <body className={`${inter.className} h-full antialiased`}>
         <NextAuthProvider>
           <QueryProvider>

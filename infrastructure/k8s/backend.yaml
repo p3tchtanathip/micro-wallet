@@ -14,30 +14,37 @@ spec:
         app: backend
     spec:
       imagePullSecrets:
-      - name: google-registry-key
+        - name: google-registry-key
       containers:
-      - name: backend
-        image: asia-southeast1-docker.pkg.dev/microwallet-495518/microwallet-repo/backend:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Production"
-        - name: ConnectionStrings__DefaultConnection
-          valueFrom:
-            secretKeyRef:
-              name: microwallet-secrets
-              key: DB_CONNECTION_STRING
-        - name: ConnectionStrings__Redis
-          valueFrom:
-            secretKeyRef:
-              name: microwallet-secrets
-              key: REDIS_CONNECTION
-        - name: Jwt__Key
-          valueFrom:
-            secretKeyRef:
-              name: microwallet-secrets
-              key: JWT_KEY
+        - name: backend
+          image: asia-southeast1-docker.pkg.dev/microwallet-495518/microwallet-repo/backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: microwallet-secrets
+                  key: DB_CONNECTION_STRING
+            - name: ConnectionStrings__Redis
+              valueFrom:
+                secretKeyRef:
+                  name: microwallet-secrets
+                  key: REDIS_CONNECTION
+            - name: Jwt__Key
+              valueFrom:
+                secretKeyRef:
+                  name: microwallet-secrets
+                  key: JWT_KEY
+            - name: GROQ_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: microwallet-secrets
+                  key: GROQ_API_KEY
+            - name: GROQ_MODEL
+              value: "llama-3.1-70b-versatile"
 ---
 apiVersion: v1
 kind: Service
@@ -48,6 +55,6 @@ spec:
   selector:
     app: backend
   ports:
-  - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

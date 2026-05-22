@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddScoped<IGoogleAuthService, GoogleAuthService>();
         services.AddScoped<IWalletService, WalletService>();
         services.AddScoped<IPaymentGatewayService, PaymentGatewayService>();
+        services.AddSingleton<IAiQueryRateLimiter, AiQueryRateLimiter>();
         services.AddScoped<IRequestContext, RequestContext>();
 
         services.AddHttpClient<IExchangeRateService, ExchangeRateService>(client =>

@@ -14,17 +14,20 @@ public class AiQueryCommandHandler : IRequestHandler<AiQueryCommand, AiQueryResp
     private readonly ILogger<AiQueryCommandHandler> _logger;
     private readonly IRequestContext _requestContext;
     private readonly IAiService _aiService;
+    private readonly IAiQueryRateLimiter _rateLimiter;
 
     public AiQueryCommandHandler(
         IApplicationDbContext context,
         ILogger<AiQueryCommandHandler> logger,
         IRequestContext requestContext,
-        IAiService aiService)
+        IAiService aiService,
+        IAiQueryRateLimiter rateLimiter)
     {
         _context = context;
         _logger = logger;
         _requestContext = requestContext;
         _aiService = aiService;
+        _rateLimiter = rateLimiter;
     }
 
     public async Task<AiQueryResponse> Handle(AiQueryCommand request, CancellationToken ct)
@@ -32,6 +35,12 @@ public class AiQueryCommandHandler : IRequestHandler<AiQueryCommand, AiQueryResp
         if (_requestContext.UserId == null) throw new UnauthorizedAccessException();
 
         var currentUserId = long.Parse(_requestContext.UserId);
+
+        if (!await _rateLimiter.CanUseAiAsync(_requestContext.UserId))
+        {
+            _logger.LogWarning("AI query limit reached for user {UserId}", currentUserId);
+            return new AiQueryResponse("You have reached your daily limit of 20 AI queries. Please try again tomorrow.");
+        }
 
         var wallet = await _context.Wallets
             .FirstOrDefaultAsync(w => w.Id == request.WalletId, ct)

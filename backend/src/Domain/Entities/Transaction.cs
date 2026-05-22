@@ -10,6 +10,7 @@ public class Transaction
     public TransactionStatus Status { get; set; }
     public string? IdempotencyKey { get; set; }
     public string? Description { get; set; }
+    public string? Category { get; set; }
     public DateTime CreatedAt { get; set; }
 
     // Relations

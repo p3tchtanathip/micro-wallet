@@ -1,6 +1,6 @@
 namespace Application.Common.Responses;
 
-public record class WalletResponse(
+public record WalletResponse(
     long WalletId,
     string WalletNumber,
     decimal Balance,

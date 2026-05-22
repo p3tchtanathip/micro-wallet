@@ -6,6 +6,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Moq;
 using UnitTests.Fixtures;
+using Microsoft.Extensions.Logging;
 
 namespace UnitTests.Application.Wallets.Commands.Withdraw;
 
@@ -14,6 +15,8 @@ public class WithdrawCommandHandlerTests : IDisposable
     private readonly ApplicationDbContext _context;
     private readonly Mock<IRequestContext> _requestContextMock;
     private readonly Mock<IPaymentGatewayService> _paymentGatewayServiceMock;
+    private readonly Mock<IAiService> _aiServiceMock;
+    private readonly Mock<ILogger<WithdrawCommandHandler>> _loggerMock;
     private readonly WithdrawCommandHandler _handler;
 
     public WithdrawCommandHandlerTests()
@@ -25,8 +28,10 @@ public class WithdrawCommandHandlerTests : IDisposable
         _context = new TestApplicationDbContext(options);
         _requestContextMock = new Mock<IRequestContext>();
         _paymentGatewayServiceMock = new Mock<IPaymentGatewayService>();
+        _aiServiceMock = new Mock<IAiService>();
+        _loggerMock = new Mock<ILogger<WithdrawCommandHandler>>();
 
-        _handler = new WithdrawCommandHandler(_context, _paymentGatewayServiceMock.Object, _requestContextMock.Object);
+        _handler = new WithdrawCommandHandler(_context, _loggerMock.Object, _paymentGatewayServiceMock.Object, _requestContextMock.Object, _aiServiceMock.Object);
     }
 
     public void Dispose()

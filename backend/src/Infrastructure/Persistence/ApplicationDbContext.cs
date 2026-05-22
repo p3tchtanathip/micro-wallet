@@ -15,7 +15,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Transaction> Transactions => Set<Transaction>();
     public DbSet<TransactionEntry> TransactionEntries => Set<TransactionEntry>();
 
-    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct) 
+    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken ct)
     => await Database.BeginTransactionAsync(ct);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -55,7 +55,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
             entity.Property(e => e.Name)
                 .IsRequired();
-            
+
             entity.HasIndex(e => e.Name)
                 .IsUnique();
 
@@ -69,7 +69,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         modelBuilder.Entity<UserRole>(entity =>
         {
             entity.ToTable("user_roles");
-            
+
             entity.HasKey(e => new { e.UserId, e.RoleId }); // Composite Key
 
             entity.HasOne(e => e.User)
@@ -127,6 +127,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
             entity.HasIndex(e => e.IdempotencyKey)
                 .IsUnique();
+
+            entity.HasIndex(e => e.Category);
 
             // Enum to string
             entity.Property(e => e.Type)

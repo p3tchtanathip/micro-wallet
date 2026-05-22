@@ -6,6 +6,7 @@ public record TransactionHistoryResponse(
     string Status,
     decimal Amount,
     string? Description,
+    string? Category,
     DateTime CreatedAt,
     string? CounterpartyName,
     long? CounterpartyWalletId,

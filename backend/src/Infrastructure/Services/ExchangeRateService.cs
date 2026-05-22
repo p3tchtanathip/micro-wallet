@@ -3,7 +3,6 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Responses;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services;
 

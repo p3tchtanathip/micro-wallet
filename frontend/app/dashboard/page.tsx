@@ -227,7 +227,14 @@ export default function DashboardPage() {
                         {tx.description && (
                           <p className="text-sm text-muted-foreground italic">&quot;{tx.description}&quot;</p>
                         )}
-                        <p className="text-xs text-muted-foreground mt-0.5">{new Date(tx.createdAt || new Date()).toLocaleString()}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          {tx.category && (
+                            <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-primary/10 text-primary">
+                              {tx.category}
+                            </span>
+                          )}
+                          <p className="text-xs text-muted-foreground">{new Date(tx.createdAt || new Date()).toLocaleString()}</p>
+                        </div>
                       </div>
                     </div>
                     <p className={`font-bold ${tx.amount > 0 ? "text-green-500" : tx.amount < 0 ? "text-red-500" : ""}`}>

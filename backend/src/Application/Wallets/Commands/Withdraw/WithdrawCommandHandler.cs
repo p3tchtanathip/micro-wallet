@@ -5,20 +5,30 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Wallets.Commands.Withdraw;
 
 public class WithdrawCommandHandler : IRequestHandler<WithdrawCommand, TransactionResponse>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ILogger<WithdrawCommandHandler> _logger;
     private readonly IPaymentGatewayService _gateway;
     private readonly IRequestContext _requestContext;
+    private readonly IAiService _aiService;
 
-    public WithdrawCommandHandler(IApplicationDbContext context, IPaymentGatewayService gateway, IRequestContext requestContext)
+    public WithdrawCommandHandler(
+        IApplicationDbContext context,
+        ILogger<WithdrawCommandHandler> logger,
+        IPaymentGatewayService gateway,
+        IRequestContext requestContext,
+        IAiService aiService)
     {
         _context = context;
+        _logger = logger;
         _gateway = gateway;
         _requestContext = requestContext;
+        _aiService = aiService;
     }
 
     public async Task<TransactionResponse> Handle(WithdrawCommand request, CancellationToken ct)
@@ -144,6 +154,19 @@ public class WithdrawCommandHandler : IRequestHandler<WithdrawCommand, Transacti
             throw new ConflictException(
                 "Wallet was modified by another transaction."
             );
+        }
+
+        try
+        {
+            var category = await _aiService.CategorizeTransactionAsync(
+                transaction.Description, transaction.Type.ToString(), request.Amount, ct);
+            transaction.Category = category;
+            await _context.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to categorize transaction");
+            transaction.Category = "Other";
         }
 
         return new TransactionResponse(

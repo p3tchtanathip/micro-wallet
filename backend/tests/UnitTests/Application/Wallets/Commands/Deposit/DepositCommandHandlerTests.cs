@@ -4,6 +4,7 @@ using Application.Wallets.Commands.Deposit;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using UnitTests.Fixtures;
 
@@ -14,6 +15,8 @@ public class DepositCommandHandlerTests : IDisposable
     private readonly ApplicationDbContext _context;
     private readonly Mock<IRequestContext> _requestContextMock;
     private readonly Mock<IPaymentGatewayService> _paymentGatewayServiceMock;
+    private readonly Mock<IAiService> _aiServiceMock;
+    private readonly Mock<ILogger<DepositCommandHandler>> _loggerMock;
     private readonly DepositCommandHandler _handler;
 
     public DepositCommandHandlerTests()
@@ -25,8 +28,10 @@ public class DepositCommandHandlerTests : IDisposable
         _context = new TestApplicationDbContext(options);
         _requestContextMock = new Mock<IRequestContext>();
         _paymentGatewayServiceMock = new Mock<IPaymentGatewayService>();
+        _aiServiceMock = new Mock<IAiService>();
+        _loggerMock = new Mock<ILogger<DepositCommandHandler>>();
 
-        _handler = new DepositCommandHandler(_context, _paymentGatewayServiceMock.Object, _requestContextMock.Object);
+        _handler = new DepositCommandHandler(_context, _loggerMock.Object, _paymentGatewayServiceMock.Object, _requestContextMock.Object, _aiServiceMock.Object);
     }
 
     public void Dispose()

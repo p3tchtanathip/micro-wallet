@@ -480,3 +480,5 @@ id_rsa_gcp.pub
 .terraform.lock.hcl
 terraform.tfvars
 *.tfstate.lock.info
+
+AGENTS.md

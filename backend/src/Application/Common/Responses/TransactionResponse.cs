@@ -1,6 +1,6 @@
 namespace Application.Common.Responses;
 
-public record class TransactionResponse(
+public record TransactionResponse(
     string ReferenceNo,
     string Status,
     decimal Amount,

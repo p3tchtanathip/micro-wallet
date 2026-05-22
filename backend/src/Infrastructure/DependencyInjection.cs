@@ -23,12 +23,17 @@ public static class DependencyInjection
         services.AddScoped<IPaymentGatewayService, PaymentGatewayService>();
         services.AddScoped<IRequestContext, RequestContext>();
 
-        services.AddHttpClient<IExchangeRateService, ExchangeRateService>(
-            client =>
-            {
-                client.BaseAddress = new Uri("https://api.frankfurter.dev/v1/");
-                client.Timeout = TimeSpan.FromSeconds(5);
-            });
+        services.AddHttpClient<IExchangeRateService, ExchangeRateService>(client =>
+        {
+            client.BaseAddress = new Uri("https://api.frankfurter.dev/v1/");
+            client.Timeout = TimeSpan.FromSeconds(5);
+        });
+
+        services.AddHttpClient<IAiService, AiService>(client =>
+        {
+            client.BaseAddress = new Uri("https://api.groq.com/");
+            client.Timeout = TimeSpan.FromSeconds(15);
+        });
 
         services.AddStackExchangeRedisCache(options =>
         {

@@ -5,20 +5,30 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Wallets.Commands.Deposit;
 
 public class DepositCommandHandler : IRequestHandler<DepositCommand, TransactionResponse>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ILogger<DepositCommandHandler> _logger;
     private readonly IPaymentGatewayService _gateway;
     private readonly IRequestContext _requestContext;
+    private readonly IAiService _aiService;
 
-    public DepositCommandHandler(IApplicationDbContext context, IPaymentGatewayService gateway, IRequestContext requestContext)
+    public DepositCommandHandler(
+        IApplicationDbContext context,
+        ILogger<DepositCommandHandler> logger,
+        IPaymentGatewayService gateway,
+        IRequestContext requestContext,
+        IAiService aiService)
     {
         _context = context;
+        _logger = logger;
         _gateway = gateway;
         _requestContext = requestContext;
+        _aiService = aiService;
     }
 
     public async Task<TransactionResponse> Handle(DepositCommand request, CancellationToken ct)
@@ -138,6 +148,18 @@ public class DepositCommandHandler : IRequestHandler<DepositCommand, Transaction
             throw new ConflictException(
                 "Wallet was modified by another transaction."
             );
+        }
+
+        try
+        {
+            var category = await _aiService.CategorizeTransactionAsync(transaction.Description, transaction.Type.ToString(), request.Amount, ct);
+            transaction.Category = category;
+            await _context.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to categorize transaction");
+            transaction.Category = "Other";
         }
 
         return new TransactionResponse(

@@ -42,6 +42,7 @@ export interface Transaction {
   status: string;
   amount: number;
   description: string | null;
+  category: string | null;
   createdAt: string;
   counterpartyName: string | null;
   counterpartyWalletId: number | null;

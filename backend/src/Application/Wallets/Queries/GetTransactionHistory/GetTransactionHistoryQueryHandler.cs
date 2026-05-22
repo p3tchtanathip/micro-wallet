@@ -53,6 +53,7 @@ public class GetTransactionHistoryQueryHandler : IRequestHandler<GetTransactionH
                 t.Type,
                 t.Status,
                 t.Description,
+                t.Category,
                 t.CreatedAt,
 
                 Entry = t.TransactionEntries
@@ -80,6 +81,7 @@ public class GetTransactionHistoryQueryHandler : IRequestHandler<GetTransactionH
             t.Status.ToString(),
             t.Entry.Amount,
             t.Description,
+            t.Category,
             t.CreatedAt,
             t.Counterparty?.FullName,
             t.Counterparty?.WalletId,

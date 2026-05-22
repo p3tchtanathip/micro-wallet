@@ -6,20 +6,30 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Wallets.Commands.Transfer;
 
 public class TransferCommandHandler : IRequestHandler<TransferCommand, TransactionResponse>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ILogger<TransferCommandHandler> _logger;
     private readonly IRequestContext _requestContext;
     private readonly IExchangeRateService _exchangeRateService;
+    private readonly IAiService _aiService;
 
-    public TransferCommandHandler(IApplicationDbContext context, IRequestContext requestContext, IExchangeRateService exchangeRateService)
+    public TransferCommandHandler(
+        IApplicationDbContext context,
+        ILogger<TransferCommandHandler> logger,
+        IRequestContext requestContext,
+        IExchangeRateService exchangeRateService,
+        IAiService aiService)
     {
         _context = context;
+        _logger = logger;
         _requestContext = requestContext;
         _exchangeRateService = exchangeRateService;
+        _aiService = aiService;
     }
 
     public async Task<TransactionResponse> Handle(TransferCommand request, CancellationToken ct)
@@ -75,11 +85,13 @@ public class TransferCommandHandler : IRequestHandler<TransferCommand, Transacti
         if (senderWallet.Balance < request.Amount)
             throw new BadRequestException("Insufficient balance");
 
+        Transaction transaction;
+
         using var dbTransaction = await _context.BeginTransactionAsync(ct);
 
         try
         {
-            var transaction = new Transaction
+            transaction = new Transaction
             {
                 ReferenceNo = Guid.NewGuid().ToString(),
                 Type = TransactionType.Transfer,
@@ -115,20 +127,32 @@ public class TransferCommandHandler : IRequestHandler<TransferCommand, Transacti
 
             await _context.SaveChangesAsync(ct);
             await dbTransaction.CommitAsync(ct);
-
-            return new TransactionResponse(
-                transaction.ReferenceNo,
-                transaction.Status.ToString(),
-                request.Amount,
-                senderWallet.Balance,
-                transaction.CreatedAt
-            );
         }
         catch (Exception)
         {
             await dbTransaction.RollbackAsync(ct);
             throw;
         }
+
+        try
+        {
+            var category = await _aiService.CategorizeTransactionAsync(transaction.Description, transaction.Type.ToString(), request.Amount, ct);
+            transaction.Category = category;
+            await _context.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to categorize transaction");
+            transaction.Category = "Other";
+        }
+
+        return new TransactionResponse(
+            transaction.ReferenceNo,
+            transaction.Status.ToString(),
+            request.Amount,
+            senderWallet.Balance,
+            transaction.CreatedAt
+        );
     }
 
     // Helper

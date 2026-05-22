@@ -125,7 +125,7 @@ export function AIAssistantPanel({ walletId }: Props) {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 min-h-0 max-h-90 [scrollbar-width:thin]">
+            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 min-h-0 max-h-90 scrollbar-hide">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 text-center">
                   <div className="p-3 rounded-full bg-primary/10 mb-3">

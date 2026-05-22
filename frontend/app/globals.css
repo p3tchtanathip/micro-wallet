@@ -41,20 +41,15 @@
 
 * {
   border-color: var(--border);
-  scrollbar-color: var(--muted) transparent;
 }
 
-::-webkit-scrollbar {
-  width: 3px;
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 4px;
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 body {

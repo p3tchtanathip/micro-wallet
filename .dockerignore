@@ -475,3 +475,5 @@ docker-compose.yml
 # GCP SSH Keys
 id_rsa_gcp
 id_rsa_gcp.pub
+
+AGENTS.md

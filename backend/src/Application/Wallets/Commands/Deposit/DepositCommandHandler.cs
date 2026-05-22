@@ -152,15 +152,14 @@ public class DepositCommandHandler : IRequestHandler<DepositCommand, Transaction
 
         try
         {
-            var category = await _aiService.CategorizeTransactionAsync(transaction.Description, transaction.Type.ToString(), request.Amount, ct);
-            transaction.Category = category;
-            await _context.SaveChangesAsync(ct);
+            transaction.Category = await _aiService.CategorizeTransactionAsync(transaction.Description, transaction.Type.ToString(), request.Amount, ct);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to categorize transaction");
-            transaction.Category = "Other";
         }
+
+        await _context.SaveChangesAsync(ct);
 
         return new TransactionResponse(
             transaction.ReferenceNo,

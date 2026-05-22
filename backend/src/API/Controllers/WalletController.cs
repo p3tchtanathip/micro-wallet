@@ -1,5 +1,6 @@
 using API.Attributes;
 using Application.Common.Responses;
+using Application.Wallets.Commands.AiQuery;
 using Application.Wallets.Commands.Create;
 using Application.Wallets.Commands.Deposit;
 using Application.Wallets.Commands.Transfer;
@@ -88,6 +89,14 @@ namespace API.Controllers
         [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<ActionResult<WalletResponse>> CreateWallet(CreateCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost("ai-query")]
+        public async Task<ActionResult<AiQueryResponse>> AiQuery(AiQueryCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);

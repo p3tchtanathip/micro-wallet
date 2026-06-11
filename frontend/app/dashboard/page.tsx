@@ -35,7 +35,7 @@ export default function DashboardPage() {
   const [showAddWalletModal, setShowAddWalletModal] = useState(false);
   const [newWalletCurrency, setNewWalletCurrency] = useState<'THB' | 'USD'>('THB');
 
-  const { data: walletsData, isLoading: isWalletsLoading } = useWallets();
+  const { data: walletsData, isLoading: isWalletsLoading } = useWallets(status === 'authenticated');
   const createWalletMutation = useCreateWallet();
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function DashboardPage() {
     }
   }, [walletsData, selectedWalletId]);
 
-  const { data: totalBalanceData, isLoading: isTotalBalanceLoading } = useTotalBalance();
+  const { data: totalBalanceData, isLoading: isTotalBalanceLoading } = useTotalBalance(status === 'authenticated');
   const { data: txData, isLoading: isTxLoading, isFetching: isTxFetching } = useWalletTransactions(selectedWalletId || 0, pageNumber, pageSize);
 
   const selectedWallet = walletsData?.find(w => w.walletId === selectedWalletId);

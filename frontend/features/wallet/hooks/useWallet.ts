@@ -2,17 +2,19 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getWallets, getTotalBalance, getTransactions, deposit, withdraw, transfer, createWallet, aiQuery } from '../api/wallet.api'
 import { TransferCommand, TransactionType, WalletResponse, AiQueryCommand } from '../types'
 
-export const useWallets = () => {
+export const useWallets = (enabled = true) => {
   return useQuery({
     queryKey: ['wallets'],
     queryFn: getWallets,
+    enabled,
   })
 }
 
-export const useTotalBalance = () => {
+export const useTotalBalance = (enabled = true) => {
   return useQuery({
     queryKey: ['totalBalance'],
     queryFn: getTotalBalance,
+    enabled,
   })
 }
 

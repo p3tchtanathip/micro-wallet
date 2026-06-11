@@ -1,4 +1,3 @@
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Responses;
 using Domain.Constants;
@@ -30,7 +29,8 @@ public class GetBalanceSummaryQueryHandler : IRequestHandler<GetBalanceSummaryQu
             .Where(w => w.UserId == currentUserId)
             .ToListAsync(ct);
 
-        if (wallets.Count == 0) throw new NotFoundException("Wallets not found");
+        if (wallets.Count == 0)
+            return new BalanceSummaryResponse(0, 0, null);
 
         var rate = await _exchangeRateService.GetUsdToThbRateAsync(ct);
         decimal totalThb = 0;

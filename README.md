@@ -1,6 +1,6 @@
 # MicroWallet
 
-A digital wallet API built with .NET 9 following Clean Architecture principles.
+Multi-currency wallet with AI-driven transaction categorization and a financial assistant. Built with Clean Architecture and CQRS, deployed using Docker, GCE, k3s with Redis caching for performance at scale.
 
 ## Architecture
 
